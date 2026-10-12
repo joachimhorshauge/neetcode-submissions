@@ -1,23 +1,22 @@
 class Solution {
 public:
-    int evalRPN(vector<string>& tokens) {
-        stack<long long> st;
+    vector<int> dailyTemperatures(vector<int>& temperatures) {
+        vector<int> result(temperatures.size(), 0);
 
-        for (const string& tok : tokens) {
-            if (tok.size() == 1 && string("+-*/").find(tok[0]) != string::npos) {
-                long long right = st.top(); st.pop();
-                long long left  = st.top(); st.pop();
-
-                switch (tok[0]) {
-                    case '+': st.push(left + right); break;
-                    case '-': st.push(left - right); break;
-                    case '*': st.push(left * right); break;
-                    case '/': st.push(left / right); break;
+        for (int i = temperatures.size() - 2; i >= 0; i--) {
+            int j = i + 1;
+            while (j < temperatures.size() && temperatures[j] <= temperatures[i]) {
+                if (result[j] == 0) {
+                    j = temperatures.size();
+                    break;
                 }
-            } else {
-                st.push(stoll(tok));
+                j += result[j];
+            }
+            if (j < temperatures.size()) {
+                result[i] = j - i; 
             }
         }
-        return (int)st.top();
+
+        return result;
     }
 };
